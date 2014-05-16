@@ -6,7 +6,7 @@
 //  Copyright (c) 2014年 Wang. All rights reserved.
 //
 /*
- * 图片加载借助了SDWebImage和SDWebImage-ProgressView 单独使用可通过cocoapods加载这两个库
+ * 图片加载借助了SDWebImage 单独使用可通过cocoapods加载此库
  *
  *-> SDWebImage (3.6)
      Asynchronous image downloader with cache support with an UIImageView
@@ -20,15 +20,7 @@
      - SDWebImage/Core (3.6)
      - SDWebImage/MapKit (3.6)
      - SDWebImage/WebP (3.6)
-     
-     
-     -> SDWebImage-ProgressView (0.3.1)
-     Category on UIImageView, adding a progress view while images are downloaded
-     using SDWebImage.
-     pod 'SDWebImage-ProgressView', '~> 0.3.1'
-     - Homepage: https://github.com/kevinrenskers/SDWebImage-ProgressView
-     - Source:   https://github.com/kevinrenskers/SDWebImage-ProgressView.git
-     - Versions: 0.3.1, 0.3.0, 0.2.0, 0.1.0 [master repo]
+
  *
  */
 #import <UIKit/UIKit.h>
@@ -38,11 +30,16 @@ typedef enum {
     LeafPhotoBrowerFromThumbnail
 }LeafPhotoBrowerType;
 
-@interface LeafPhotoBrower : UIView
+@interface LeafPhotoBrower : UIView<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
+@property (nonatomic,strong) UICollectionView *collectionView;
 @property (nonatomic,assign) LeafPhotoBrowerType type;
-@property (nonatomic,strong) NSArray *thumbnailImageUrls;
+@property (nonatomic,strong) NSArray *images;
 @property (nonatomic,strong) NSArray *originalImageUrls;
 @property (nonatomic,strong) NSArray *imageViews;
+@property (nonatomic,strong) UILabel *pageLabel;
+@property (nonatomic,assign) NSInteger currentIndex;
+
+-(void)scrollToCurrentPage;
 /**
  *  适用于像新浪微博一样，通过多个imageView显示出了缩略图的情况，如果只展示缩略图，原始图的参数为空就可以
  *
@@ -51,7 +48,7 @@ typedef enum {
  *
  *  @return LeafPhotoBrower
  */
-+(void)showWithImageViews:(NSArray *)imgViews originalImageUrls:(NSArray *)urls;
++(void)showWithImageViews:(NSArray *)imgViews originalImageUrls:(NSArray *)urls currentIndex:(NSInteger)index;
 /**
  *  如果图片没有展示过，可用这个方法直接展示图片
  *
@@ -59,6 +56,7 @@ typedef enum {
  *  @param urls     NSString的数组
  *
  *  @return LeafPhotoBrower
- */
+ *
 +(void)showWithThumbnailImageUrls:(NSArray *)thumUrls originalImageUrls:(NSArray *)urls;
+ */
 @end
