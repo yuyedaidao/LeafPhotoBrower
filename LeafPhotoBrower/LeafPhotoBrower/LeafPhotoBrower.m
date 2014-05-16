@@ -25,8 +25,18 @@ static NSString *name_photocell = @"LeafPhotoBrowerCell";
 //        self.backgroundColor = [UIColor blackColor];
         [self initCollectionView];
         
+//        [self initPageLabel];
     }
     return self;
+}
+-(void)initPageLabel{
+    CGFloat w = 60.0f;
+    CGFloat h = 30.0f;
+    _pageLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width-w, self.bounds.size.height-20-h, w, h)];
+    [self addSubview:self.pageLabel];
+    self.pageLabel.backgroundColor = [UIColor clearColor];
+    self.pageLabel.textColor = [UIColor whiteColor];
+    self.pageLabel.text = [NSString stringWithFormat:@"%d/%d",self.currentIndex+1,self.totalCount];
 }
 -(void)initCollectionView{
     
@@ -89,7 +99,11 @@ static NSString *name_photocell = @"LeafPhotoBrowerCell";
     return cell;
 }
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    
+    NSInteger page = (scrollView.contentOffset.x+scrollView.bounds.size.width/2)/scrollView.bounds.size.width;
+    if(page<self.totalCount && page!=self.currentIndex){
+        self.currentIndex = page;
+        self.pageLabel.text = [NSString stringWithFormat:@"%d/%d",page+1,self.totalCount];
+    }
 }
 //-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
 //    
@@ -104,7 +118,10 @@ static NSString *name_photocell = @"LeafPhotoBrowerCell";
         _brower.imageViews = imgViews;
         _brower.originalImageUrls = urls;
         _brower.currentIndex = index;
+        _brower.totalCount = MAX(imgViews.count, urls.count);
+        [_brower initPageLabel];
         _brower.collectionView.hidden = YES;
+        
         UIView *window = [UIApplication sharedApplication].keyWindow;
         [window addSubview:_brower];
         
@@ -119,6 +136,7 @@ static NSString *name_photocell = @"LeafPhotoBrowerCell";
             currentImgView.frame = window.bounds;
         } completion:^(BOOL finished) {
             [_brower.collectionView reloadData];
+            [_brower scrollToCurrentPage];
             _brower.collectionView.hidden = NO;
             [currentImgView removeFromSuperview];
         }];
@@ -132,10 +150,12 @@ static NSString *name_photocell = @"LeafPhotoBrowerCell";
         _brower.images = thumbImgs;
         _brower.originalImageUrls = urls;
         _brower.currentIndex = index;
-        
+        _brower.totalCount = MAX(thumbImgs.count, urls.count);
+        [_brower initPageLabel];
         UIView *window = [UIApplication sharedApplication].keyWindow;
         [window addSubview:_brower];
         [_brower.collectionView reloadData];
+        [_brower scrollToCurrentPage];
     }
 }
 

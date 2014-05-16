@@ -10,6 +10,8 @@
 @class LeafPhotoBrowerCell;
 typedef void (^DownLoadCompleteBlock)(LeafPhotoBrowerCell *cell);
 @interface LeafPhotoBrowerCell : UICollectionViewCell
+@property (weak, nonatomic) IBOutlet UITapGestureRecognizer *oneTap;
+@property (weak, nonatomic) IBOutlet UITapGestureRecognizer *doubleTap;
 @property (strong,nonatomic) NSIndexPath *indexPath;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIImageView *photoImgView;

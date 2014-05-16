@@ -38,6 +38,7 @@ typedef enum {
 @property (nonatomic,strong) NSArray *imageViews;
 @property (nonatomic,strong) UILabel *pageLabel;
 @property (nonatomic,assign) NSInteger currentIndex;
+@property (nonatomic,assign) NSInteger totalCount;
 
 -(void)scrollToCurrentPage;
 /**
